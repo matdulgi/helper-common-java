@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class PropertiesMD extends CommonEntity{
+public class PropertiesEntity extends CommonEntity{
     @Autowired
     Core core;
     /*

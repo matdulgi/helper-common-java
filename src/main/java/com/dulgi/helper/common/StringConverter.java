@@ -8,7 +8,7 @@ interface StringConverter{
     int ASCII_MAX_UP_CASE = 91;
 
     boolean isCamelStyle(String str);
-    boolean isPropetyStyle(String str);
+    boolean isPropertyStyle(String str);
     boolean isSnakeStyle(String str);
 
     // seperated Word : snake, property  
