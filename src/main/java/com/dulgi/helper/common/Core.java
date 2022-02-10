@@ -1,6 +1,11 @@
 package com.dulgi.helper.common;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -45,7 +50,7 @@ public class Core implements StringConverter{
 	}
 
 	@Override
-	public String sepWdToCamel(String str, char delimiter) {
+	public String sepStrToCamel(String str, char delimiter) {
 		// not snake ... need more condition
 		String type = "";
 		switch (delimiter){
@@ -131,9 +136,20 @@ public class Core implements StringConverter{
 		return stringBuffer.toString();
 	}
 
-	public Properties loadProp(){
-		return null;
-
+	public Properties loadProps(String filePath){
+		Properties props = new Properties();
+		try {
+			File file = new File(ClassLoader.getSystemResource(filePath).toURI());
+			FileInputStream fis = new FileInputStream(file);
+			props.load(fis);
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return props;
 	}
 
 	// tmp
@@ -149,9 +165,6 @@ public class Core implements StringConverter{
 		methodNameArray[0] = (char) (methodNameArray[0] + 32);
 		return new String(methodNameArray);
 	}
-
-
-
 
 
     /* get Setters by substr set
