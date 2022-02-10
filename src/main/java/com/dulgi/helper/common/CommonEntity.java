@@ -12,13 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 /* entity wrapper
     this entity means the Object has setter, getter, capsuled properties
 */
-public class CommonEntity {
-    @Autowired
-    Core core;
+public class CommonEntity<T> {
+    Core core = new Core();
     Logger logger = LoggerFactory.getLogger(CommonEntity.class);
     String type;
     String classPath;
-    Object entity;
+    T entity;
     Method[] setters; 
     Method[] getters;
 	Properties props;
@@ -26,25 +25,36 @@ public class CommonEntity {
     //regex
     final String setterRegex = Regex.SETTER.getRegex();
     final String getterRegex = Regex.GETTER.getRegex();
-    
+
 
     public CommonEntity(){ }
 
-    public CommonEntity(Object entity){
-        this.entity = entity;
-        setters = core.getMethods(entity.getClass(), Pattern.compile(setterRegex) );
 
-    }
-
-    // create empty new entity wity type 
+    // create empty new entity wity type
     public CommonEntity(String type){
     }
 
     // create empty entity
-    public CommonEntity(Class<?> clazz){
-    }
+    public CommonEntity(Class<? extends T> clazz){
+		try {
+			entity = clazz.newInstance();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+	}
 
-    public Method[] getSetters(String name){
+	public T getEntity(){
+		return entity;
+	}
+
+	public CommonEntity(T entity){
+		this.entity = entity;
+		setters = core.getMethods(entity.getClass(), Pattern.compile(setterRegex) );
+	}
+
+	public Method[] getSetters(String name){
         return setters;
     }
     // public Method[] getGetters(String name){
@@ -88,20 +98,16 @@ public class CommonEntity {
 		if (props != null){
 			return props;
 		}
-		String prop = "";
-		Object propVal = "";
-//		Properties props = new Properties();
+		String prop, propVal = "";
 
 		Class clazz = entity.getClass();
 		Method[] methods = clazz.getDeclaredMethods();
 
-		System.out.println(entity.getClass().getSimpleName() + "의 프로퍼티 목록");
 		for (Method method : methods) {
 			if (isGetter(method)) {
 				prop = setterToProperty(method);
 				try {
-					propVal = method.invoke(entity);
-					System.out.print("프로퍼티 : " + prop + " 값 : " + propVal);
+					propVal = (String)method.invoke(entity);
 					props.put(prop, propVal);
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 					e.printStackTrace();
@@ -111,6 +117,46 @@ public class CommonEntity {
 		return props;
 	}
 
-    public void setEntityWithSetters(){
+    public void setEntityWithProp(Properties props){
+		String prop, propVal, mprop;
+		Method[] methods = core.getMethods(entity.getClass(), Pattern.compile(setterRegex));
+
+		Enumeration propEnum = props.propertyNames();
+		while(propEnum.hasMoreElements()) {
+			prop = (String) propEnum.nextElement();
+			propVal = props.getProperty(prop);
+			
+			for (Method method : methods){
+//				mprop = core.setterToProp(method.getName()); accessed just one time
+				if(core.setterToProp(method.getName()).equals(prop)){
+					try {
+						method.invoke(entity, propVal);
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
     }
+
+	public void entityInfo(){
+		entity.toString();
+//		Enumeration propEnum = props.propertyNames();
+//		while(propEnum.hasMoreElements()){
+//		}
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
