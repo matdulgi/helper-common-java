@@ -2,10 +2,7 @@ package com.dulgi.helper.common;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
@@ -24,6 +21,7 @@ public class CommonEntity {
     Object entity;
     Method[] setters; 
     Method[] getters;
+	Properties props;
 
     //regex
     final String setterRegex = Regex.SETTER.getRegex();
@@ -70,45 +68,47 @@ public class CommonEntity {
 		return new String(methodNameArray);
 	}
 
-    	// return all DTO's properties set
-	public Set<String> settersToPropsNames() {
-		Set<String> propertySet = new HashSet<>();
+	// return all entity's properties set
+	public Set<String> getPropsNames() {
+		Set<String> propSet = new HashSet<>();
 		Class clazz = entity.getClass();
 		Method[] methods = clazz.getDeclaredMethods();
-		String methodName;
-		String property;
+		String prop;
 
 		for (Method method : methods) {
-			property = setterToProperty(method);
-			propertySet.add(property);
+			prop = setterToProperty(method);
+			propSet.add(prop);
 		}
-		return propertySet;
+		return propSet;
 	}
 
-    	// return DTO's properties map with passed dto's setters
-	public Map<String, Object> settersToProps(Object dto) {
-		String property = "";
-		Object propertyValue = "";
-		Map<String, Object> propertieMap = new HashMap<>();
+	// return Entity's properties with passed dto's getters
+	// it uses entity's getters
+	public Properties getProps() {
+		if (props != null){
+			return props;
+		}
+		String prop = "";
+		Object propVal = "";
+//		Properties props = new Properties();
 
-		Class clazz = dto.getClass();
+		Class clazz = entity.getClass();
 		Method[] methods = clazz.getDeclaredMethods();
 
-		System.out.println(dto.getClass().getSimpleName() + "의 프로퍼티 목록");
+		System.out.println(entity.getClass().getSimpleName() + "의 프로퍼티 목록");
 		for (Method method : methods) {
-			// Class에는 다른 get메서드가 존재한다
-			if (method.getName().contains("get")) {
-				property = setterToProperty(method);
+			if (isGetter(method)) {
+				prop = setterToProperty(method);
 				try {
-					propertyValue = method.invoke(dto);
-					System.out.print("프로퍼티 : " + property + " 값 : " + propertyValue);
-					propertieMap.put(property, propertyValue);
+					propVal = method.invoke(entity);
+					System.out.print("프로퍼티 : " + prop + " 값 : " + propVal);
+					props.put(prop, propVal);
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 					e.printStackTrace();
 				}
 			}
 		}
-		return propertieMap;
+		return props;
 	}
 
     public void setEntityWithSetters(){
