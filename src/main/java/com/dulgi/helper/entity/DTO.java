@@ -1,12 +1,14 @@
-package com.dulgi.helper.common;
+package com.dulgi.helper.entity;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Properties;
 
+import com.dulgi.helper.common.CommonEntity;
+import com.dulgi.helper.common.Core;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class DTO extends CommonEntity{
+public class DTO extends CommonEntity {
 	@Autowired
 	public Core core;
 
