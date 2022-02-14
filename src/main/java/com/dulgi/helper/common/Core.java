@@ -136,12 +136,11 @@ public class Core implements StringConverter{
 		return stringBuffer.toString();
 	}
 
-	public Properties loadProps(String filePath){
+	public static Properties loadProps(String filePath){
 		Properties props = new Properties();
 		try {
 			File file = new File(ClassLoader.getSystemResource(filePath).toURI());
-			FileInputStream fis = new FileInputStream(file);
-			props.load(fis);
+			props.load(new FileInputStream(file));
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
