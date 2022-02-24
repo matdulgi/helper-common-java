@@ -14,11 +14,12 @@ public class GenericHelper {
         Type type = target.getGenericSuperclass();
         if (type != null) {
             if (type instanceof ParameterizedType) {
-                return new Type[] { type };
+                return new Type[]{type};
             }
         }
         return new Type[0];
     }
+
     // * check
     public ParameterizedType getParameterizedType(Class<?> target) {
         Type[] types = getGenericType(target);

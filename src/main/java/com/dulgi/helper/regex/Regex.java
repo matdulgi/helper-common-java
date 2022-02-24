@@ -1,4 +1,4 @@
-package com.dulgi.helper.common;
+package com.dulgi.helper.regex;
 
 public enum Regex {
     SETTER("^set[A-Z].*"),
@@ -12,8 +12,8 @@ public enum Regex {
     Regex(String regex) {
         this.regex = regex;
     }
-    
-    public String getRegex(){
+
+    public String getRegex() {
         return regex;
     }
 
