@@ -1,15 +1,26 @@
-package com.dulgi.helper.common;
+package com.dulgi.helper.jdbc;
 
+import com.dulgi.helper.annotation.NeedToChange;
+import com.dulgi.helper.common.Core;
+import com.dulgi.helper.regex.MysqlTypeRegex;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.util.regex.Pattern;
 
 public class JDBCFunction {
     @Autowired
     Core core;
+    String dbType;
 
+    @NeedToChange("remove noarg constructor")
+    JDBCFunction(){}
+
+    public JDBCFunction(String dbType){
+        this.dbType = dbType;
+    }
 
     // setter나 getter메서드의 이름을 칼럼명으로 변경. 칼럼명은 대문자로 튀어나오기 때문에 대문자로 지정
     public String methodNameToColumn(String methodName) {
@@ -30,6 +41,25 @@ public class JDBCFunction {
                 convertedValue = columnValue;
         }
         return convertedValue;
+    }
+
+    @NeedToChange("Mysql only now")
+    // sequence of evaluate can be changed
+    public String evalTypeRegex(String value){
+        if(Pattern.matches(MysqlTypeRegex.JSON.getRegex(), value)){
+            return MysqlTypeRegex.JSON.getType();
+        } else if(Pattern.matches(MysqlTypeRegex.INT.getRegex(), value)){
+            return MysqlTypeRegex.INT.getType();
+        } else if(Pattern.matches(MysqlTypeRegex.DOUBLE.getRegex(), value)){
+            return MysqlTypeRegex.DOUBLE.getType();
+        }
+        if(Pattern.matches(MysqlTypeRegex.BIGINT.getRegex(), value)){
+            return MysqlTypeRegex.BIGINT.getType();
+        }
+        if(Pattern.matches(MysqlTypeRegex.VARCHAR.getRegex(), value)){
+            return MysqlTypeRegex.VARCHAR.getType();
+        }
+        throw new NoMatchTypeRegexException();
     }
 
 
