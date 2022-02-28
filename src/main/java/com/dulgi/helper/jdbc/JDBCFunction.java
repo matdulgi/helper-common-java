@@ -8,12 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 import java.util.regex.Pattern;
 
 public class JDBCFunction {
     @Autowired
     Core core;
     String dbType;
+
+    private final int TIMESTAMP_LENGTH = 10 ;
 
     @NeedToChange("remove noarg constructor")
     JDBCFunction(){}
@@ -124,6 +128,14 @@ public class JDBCFunction {
                 return java.sql.Date.valueOf(paramValue[0]);
         }
         return "result";
+    }
+
+
+    public String convertUnixTimeFormat(String str){
+        if (str.length()==TIMESTAMP_LENGTH) str = String.valueOf(Long.valueOf(str) *1000);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT+9"));
+        return sdf.format(Long.parseLong(str));
     }
 
 }
