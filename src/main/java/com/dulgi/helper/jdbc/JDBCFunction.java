@@ -3,7 +3,6 @@ package com.dulgi.helper.jdbc;
 import com.dulgi.helper.annotation.NeedToChange;
 import com.dulgi.helper.common.Core;
 import com.dulgi.helper.regex.MysqlTypeRegex;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -13,8 +12,7 @@ import java.util.TimeZone;
 import java.util.regex.Pattern;
 
 public class JDBCFunction {
-    @Autowired
-    Core core;
+    Core core = new Core();
     String dbType;
 
     private final int TIMESTAMP_LENGTH = 10 ;
