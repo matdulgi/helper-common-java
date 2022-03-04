@@ -1,14 +1,12 @@
 package com.dulgi.helper.legacy;
 
 import com.dulgi.helper.common.Core;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
 public class Legacy {
-    @Autowired
     Core core;
 
     //Jdbc

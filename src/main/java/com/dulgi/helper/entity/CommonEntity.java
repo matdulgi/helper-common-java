@@ -76,7 +76,7 @@ public abstract class CommonEntity<T> {
         char[] methodNameArray = null;
         if (isSetter(setter)) {
             methodNameArray = setter.getName().substring(3).toCharArray();
-            methodNameArray[0] = (char) (methodNameArray[0] + core.ASCII_CASE_DIFF);
+            methodNameArray[0] = (char) (methodNameArray[0] + Core.ASCII_CASE_DIFF);
         }
         return new String(methodNameArray);
     }

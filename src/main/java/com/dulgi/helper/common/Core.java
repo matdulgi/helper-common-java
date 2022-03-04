@@ -1,6 +1,7 @@
 package com.dulgi.helper.common;
 
 import com.dulgi.helper.annotation.Moved;
+import com.dulgi.helper.annotation.NeedToChange;
 import com.dulgi.helper.regex.Regex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,14 +21,20 @@ import java.util.regex.Pattern;
 	* core class's method could be static because it's doesn't used to client
 	* Entity e.g. Properties,DTO extends CommonEntity 
 */
-public class Core implements StringConverter {
+public class Core {
     Logger logger = LoggerFactory.getLogger(Core.class);
+
+    @NeedToChange("this values can be moved to String converter")
+    public final static int ASCII_CASE_DIFF = 32;
+    public final static int ASCII_MIN_LO_CASE = 97;
+    public final static int ASCII_MAX_LO_CASE = 122;
+    public final static int ASCII_MIN_UP_CASE = 65;
+    public final static int ASCII_MAX_UP_CASE = 91;
 
     public Core() {
     }
 
 
-    @Override
     public boolean isCamelStyle(String str) {
         if (!str.contains("_")) {
             logger.warn("args not contain _");
@@ -42,17 +49,14 @@ public class Core implements StringConverter {
         else return false;
     }
 
-    @Override
     public boolean isPropertyStyle(String str) {
         return Pattern.matches(Regex.PROPERTY.getRegex(), str);
     }
 
-    @Override
     public boolean isSnakeStyle(String str) {
         return Pattern.matches(Regex.SNAKE.getRegex(), str);
     }
 
-    @Override
     public String sepStrToCamel(String str, char delimiter) {
         // not snake ... need more condition
         String type = "";
@@ -84,7 +88,6 @@ public class Core implements StringConverter {
         }
     }
 
-    @Override
     public String camelToSepWd(String str, char delimiter) {
 
         return null;

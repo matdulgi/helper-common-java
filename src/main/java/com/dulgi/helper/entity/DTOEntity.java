@@ -2,7 +2,6 @@ package com.dulgi.helper.entity;
 
 import com.dulgi.helper.annotation.NeedToChange;
 import com.dulgi.helper.common.Core;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -13,8 +12,7 @@ import java.util.Map;
 import java.util.Properties;
 
 public class DTOEntity<T> extends CommonEntity {
-    @Autowired
-    private Core core;
+    private Core core = new Core();
 
     // properties is created by setters or getters
     private Map<String, Object> props;
